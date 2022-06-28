@@ -1,7 +1,8 @@
-import * as bodyParser from "body-parser";
 import * as express from "express";
-import { createClient } from 'redis';
 import routes from './router';
+import * as swaggerUi from 'swagger-ui-express';
+import * as swaggerDocument from './swagger.json';
+
 
 class Server {
     private app: any;
@@ -20,8 +21,8 @@ class Server {
         this.app.use("/health", (req, res) => {
             res.send("I am okay")
         })
-
         this.app.use('/api', routes);
+        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     }
 

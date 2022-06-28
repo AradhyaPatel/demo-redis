@@ -1,0 +1,167 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "User Project CRUD using Redis",
+        "description": "A minimal and easy to follow example of what you need to create a CRUD style API in NodeJs using TypeScript",
+        "license": {
+            "name": "",
+            "url": ""
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:9000/api/user",
+            "description": "Local server"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Users",
+            "description": "API for users in the system"
+        }
+    ],
+    "components": {
+        "schemas": {
+            "key": {
+                "type": "string",
+                "description": "An key of a user object",
+                "example": "age or name or email"
+            },
+            "user": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the user"
+                    },
+                    "age": {
+                        "type": "string",
+                        "description": "Age of the user"
+                    },
+                    "email": {
+                        "type": "string",
+                        "description": "Email of the user"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/get": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get all users in system",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/user"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/create": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Create a new user in system",
+                "requestBody": {
+                    "description": "User Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/user"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "user added successfully"
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    }
+                }
+            }
+        },
+        "/update": {
+            "put": {
+                "summary": "Update user with given key",
+                "tags": [
+                    "Users"
+                ],
+                "requestBody": {
+                    "description": "User Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/key"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "key",
+                        "required": true,
+                        "description": "user with new values of properties",
+                        "schema": {
+                            "$ref": "#/components/schemas/key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user field updated successfully"
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "404": {
+                        "description": "Failed. user not found."
+                    }
+                }
+            }
+        },
+        "/delete": {
+            "delete": {
+                "summary": "Deleted user's given key",
+                "tags": [
+                    "Users"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "key",
+                        "required": true,
+                        "description": "Delete user's key",
+                        "schema": {
+                            "$ref": "#/components/schemas/key"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "user field deleted successfully"
+                    },
+                    "404": {
+                        "description": "Failed. User not found."
+                    }
+                }
+            }
+        }
+    }
+}
