@@ -10,57 +10,64 @@ client.connect();
 class UserController {
 
     static instance: UserController;
-    static getInstance(){
-        if(UserController.instance){
+    static getInstance() {
+        if (UserController.instance) {
             return UserController.instance;
         }
         UserController.instance = new UserController();
         return UserController.instance;
     }
 
-    public async get(req: Request, res: Response){
-        try{
+    public async get(req: Request, res: Response) {
+        try {
             const data = await client.hGetAll("user");
-            if(data !== null){
+            if (data !== null) {
                 res.json(data)
             } else {
                 res.send("NO user found")
             }
-        } catch(err){
+        } catch (err) {
             console.error(err);
-            
+
         }
     }
 
-    public async create(req: Request, res: Response){
-        try{
-            await client.hSet("user",req.body);
-            res.send("user added successfully")
-        } catch(err){
+    public async create(req: Request, res: Response) {
+        try {
+            await client.hSet("user", req.body);
+            res.send({
+                status: 200,
+                message: "user added successfully",
+            })
+        } catch (err) {
             console.error(err);
-            
+
         }
     }
 
-    public async update(req: Request, res: Response){
-        try{
-            await client.hSet("user",req.body);
-            res.send(" user field updated successfully")
-        } catch(err){
+    public async update(req: Request, res: Response) {
+        try {
+            await client.hSet("user", req.body);
+            res.send({
+                status: 200,
+                message : " user field updated successfully"})
+        } catch (err) {
             console.error(err);
-            
+
         }
     }
 
-    public async delete(req: Request, res: Response){
-        
-        try{
-            const {key} = req.body;
+    public async delete(req: Request, res: Response) {
+
+        try {
+            const { key } = req.body;
             await client.HDEL("user", key);
-            res.send("user field deleted successfully")
-        } catch(err){
+            res.send({
+                status: 200,
+                message : "user field deleted successfully"})
+        } catch (err) {
             console.error(err);
-            
+
         }
     }
 
