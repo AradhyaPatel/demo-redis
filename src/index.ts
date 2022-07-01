@@ -5,7 +5,7 @@ const config = dotenv.config().parsed;
 Object.freeze(config);
 
 
-const server = new Server(config);
+const server = new Server();
 
 server.setupRoute();
 server.run();

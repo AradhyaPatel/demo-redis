@@ -5,31 +5,30 @@ import * as swaggerDocument from './swagger.json';
 
 
 class Server {
-    private app: any;
-    constructor(private config) {
-        this.app = express();
-        this.app.use(express.json());
-        this.app.use(express.urlencoded());
+    private application: any;
+    constructor() {
+        this.application = express();
+        this.application.use(express.json());
+        this.application.use(express.urlencoded());
     }
 
     public bootstrap() {
-        this.setupRoute();
-        return this.app;
+        this.setupRoute(); 
+        return this.application;
     }
 
     public setupRoute() {
-        this.app.use('/api', routes);
-        this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+        this.application.use('/api', routes);
+        this.application.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     }
 
-    public run() {
-        const { config: { PORT } } = this;
-        this.app.listen(PORT, function (err) {
+    public run() {     
+        this.application.listen(9000, function (err) {
             if (err) {
                 console.log("Error in server setup")
             }
-            console.log("Server listening on Port", PORT);
+            console.log("Server listening on Port", 9000);
         })
     }
 }

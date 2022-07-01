@@ -20,7 +20,8 @@
     },
   },
   "exclude": [
-    "dist"
+    "dist",
+    "**/*.spec.ts"
   ],
   "include": [
     "src"

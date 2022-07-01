@@ -19,41 +19,61 @@ class UserController {
     }
 
     public async get(req: Request, res: Response) {
+
         try {
             const data = await client.hGetAll("user");
             if (data !== null) {
-                res.json(data)
-            } else {
-                res.send("NO user found")
+                res.send({
+                    status: 200,
+                    data: data,
+                })
             }
         } catch (err) {
-            console.error(err);
-
+            res.send({
+                status: 404,
+                message: "NO user found",
+            })
         }
     }
 
     public async create(req: Request, res: Response) {
         try {
             await client.hSet("user", req.body);
-            res.send({
-                status: 200,
-                message: "user added successfully",
-            })
+            if (req.body !== {}) {
+                res.send({
+                    status: 200,
+                    message: "user added successfully",
+                })
+            } else {
+                res.status(404).send({
+                    message: "Please provide user data",
+                })
+            }
         } catch (err) {
-            console.error(err);
+            res.status(404).send({
+                message: err.message
+            })
 
         }
     }
 
     public async update(req: Request, res: Response) {
         try {
-            await client.hSet("user", req.body);
-            res.send({
-                status: 200,
-                message : " user field updated successfully"})
+            if (req.body !== {}) {
+                await client.hSet("user", req.body);
+                res.status(200).send({
+                    message: " user field updated successfully"
+                })
+            }
+            else {
+                res.status(404).send({
+                    message: " Provide key to update"
+                })
+            }
         } catch (err) {
-            console.error(err);
-
+            res.status(404).send({
+                message: err.message
+            })
         }
     }
 
@@ -61,13 +81,21 @@ class UserController {
 
         try {
             const { key } = req.body;
-            await client.HDEL("user", key);
-            res.send({
-                status: 200,
-                message : "user field deleted successfully"})
+            if (req.body !== {}) {
+                await client.HDEL("user", key);
+                res.send({
+                    status: 200,
+                    message: "user field deleted successfully"
+                })
+            } else {
+                res.status(404).send({
+                    message: "Provide key to delete"
+                })
+            }
         } catch (err) {
-            console.error(err);
-
+            res.status(404).send({
+                message: "Provide key to delete"
+            })
         }
     }
 
